@@ -26,17 +26,19 @@ const Wrapper = styled.div`
 
 type IProp = {
   item: CartItemType;
+  handleAddToCart: (clickedItem: CartItemType) => void;
 };
 
-const Item = ({ item }: IProp) => {
+const Item = ({ item, handleAddToCart }: IProp) => {
   return (
     <Wrapper>
       <img src={item.image} alt="" />
       <div>
         <h3>{item.title}</h3>
         <p>{item.description}</p>
+        <h3>${item.price}</h3>
       </div>
-      <button>add item</button>
+      <button onClick={() => handleAddToCart(item)}>Add to cart</button>
     </Wrapper>
   );
 };
