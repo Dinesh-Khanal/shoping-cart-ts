@@ -8,14 +8,20 @@ import {
   Drawer,
   Box,
   Typography,
-  Button,
+  IconButton,
+  Badge,
 } from "@mui/material";
-
+import { AddShoppingCart } from "@mui/icons-material";
 const Wrapper = styled.div`
-  margin: auto;
+  margin: 50px auto;
   width: 90%;
 `;
-
+const StyledButton = styled(IconButton)`
+  position: fixed;
+  z-index: 100;
+  right: 20px;
+  top: 20px;
+`;
 export type CartItemType = {
   id: number;
   category: string;
@@ -33,16 +39,39 @@ const getProducts = async (): Promise<[CartItemType]> => {
 function App() {
   const { data, isLoading, error } = useQuery("products", getProducts);
   const [cartOpen, setCartOpen] = useState(false);
-  const addToCart = (item: CartItemType) => {
-    console.log(item);
+  const [cartItems, setCartItems] = useState([] as CartItemType[]);
+
+  const addToCart = (cartItem: CartItemType) => {
+    setCartItems((prev) => {
+      // 1. Is the item already added in the cart?
+      const isItemInCart = prev.find((itm) => itm.id === cartItem.id);
+
+      if (isItemInCart) {
+        return prev.map((itm) =>
+          itm.id === cartItem.id ? { ...itm, amount: itm.amount + 1 } : itm
+        );
+      }
+      // First time the item is added
+      return [...prev, { ...cartItem, amount: 1 }];
+    });
   };
+
+  const getTotalItems = (items: CartItemType[]) => {
+    return items.reduce(
+      (accAmount: number, item) => accAmount + item.amount,
+      0
+    );
+  };
+
   if (isLoading) return <LinearProgress />;
   if (error) return <div>Something went wrong ....</div>;
   return (
     <Wrapper>
-      <Button variant="text" onClick={() => setCartOpen(true)}>
-        CART
-      </Button>
+      <StyledButton onClick={() => setCartOpen(true)}>
+        <Badge badgeContent={getTotalItems(cartItems)} color="error">
+          <AddShoppingCart />
+        </Badge>
+      </StyledButton>
       <Drawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
         <Box p={2} width="250px" textAlign="center" role="presentation">
           <Typography variant="h6" component="div">
