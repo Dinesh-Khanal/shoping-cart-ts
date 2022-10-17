@@ -1,16 +1,9 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import Item from "./components/Item";
+import Cart from "./components/Cart";
 import { useQuery } from "react-query";
-import {
-  LinearProgress,
-  Grid,
-  Drawer,
-  Box,
-  Typography,
-  IconButton,
-  Badge,
-} from "@mui/material";
+import { LinearProgress, Grid, Drawer, IconButton, Badge } from "@mui/material";
 import { AddShoppingCart } from "@mui/icons-material";
 const Wrapper = styled.div`
   margin: 50px auto;
@@ -73,11 +66,7 @@ function App() {
         </Badge>
       </StyledButton>
       <Drawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
-        <Box p={2} width="250px" textAlign="center" role="presentation">
-          <Typography variant="h6" component="div">
-            Side Panel
-          </Typography>
-        </Box>
+        <Cart />
       </Drawer>
       <Grid container spacing={4}>
         {data?.map((item) => (
