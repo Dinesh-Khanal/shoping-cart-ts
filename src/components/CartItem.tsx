@@ -33,6 +33,7 @@ const CartItem = ({ cartItem, addToCart, removeFromCart }: Props) => {
   return (
     <Wrapper>
       <h3>{cartItem.title}</h3>
+      <p>${cartItem.amount * cartItem.price}</p>
       <button onClick={() => addToCart(cartItem)}>+</button>
       <p>{cartItem.amount}</p>
       <button onClick={() => removeFromCart(cartItem)}>-</button>
