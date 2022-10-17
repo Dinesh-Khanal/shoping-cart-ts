@@ -49,6 +49,20 @@ function App() {
     });
   };
 
+  const removeFromCart = (cartItem: CartItemType) => {
+    setCartItems((prev) =>
+      prev.reduce((ack, item) => {
+        if (item.id === cartItem.id) {
+          if (item.amount > 1) {
+            return [...ack, { ...item, amount: item.amount - 1 }];
+          }
+          return ack;
+        }
+        return [...ack, item];
+      }, [] as CartItemType[])
+    );
+  };
+
   const getTotalItems = (items: CartItemType[]) => {
     return items.reduce(
       (accAmount: number, item) => accAmount + item.amount,
@@ -66,7 +80,11 @@ function App() {
         </Badge>
       </StyledButton>
       <Drawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
-        <Cart />
+        <Cart
+          cartItems={cartItems}
+          addToCart={addToCart}
+          removeFromCart={removeFromCart}
+        />
       </Drawer>
       <Grid container spacing={4}>
         {data?.map((item) => (
